@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SubTrackr</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+  <div class="container py-4">
+    <h1 class="text-center mb-4 text-primary fw-bold">💳 SubTrackr</h1>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="text-muted">Your Subscriptions</h5>
+      <div>
+        <a href="{{ url_for('add') }}" class="btn btn-primary">➕ Add</a>
+        <a href="{{ url_for('export') }}" class="btn btn-success ms-2">⬇️ Download CSV</a>
+      </div>
+    </div>
+    {% if subs %}
+      <div class="table-responsive">
+        <table class="table table-striped align-middle shadow-sm">
+          <thead class="table-dark">
+            <tr><th>Name</th><th>Cost ($)</th><th>Frequency</th><th>Actions</th></tr>
+          </thead>
+          <tbody>
+            {% for s in subs %}
+            <tr>
+              <td>{{ s.name }}</td>
+              <td>{{ "%.2f"|format(s.cost) }}</td>
+              <td class="text-capitalize">{{ s.frequency }}</td>
+              <td>
+                <a href="{{ url_for('edit', id=s.id) }}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{{ url_for('delete', id=s.id) }}" class="btn btn-danger btn-sm">Delete</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-4">
+        <h5>Total Monthly Cost: <span class="text-success">${{ "%.2f"|format(total_monthly) }}</span></h5>
+        <h5>Total Yearly Cost: <span class="text-success">${{ "%.2f"|format(total_yearly) }}</span></h5>
+      </div>
+    {% else %}
+      <div class="alert alert-info text-center shadow-sm">No subscriptions yet. Click “Add” to begin!</div>
+    {% endif %}
+  </div>
+</body>
+</html>
